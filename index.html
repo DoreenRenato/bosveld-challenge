@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Epic Bosveld Weekend Challenge 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a472a 0%, #2d5016 25%, #0d3d1a 50%, #1a3d0d 75%, #2d4a1e 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            color: white;
+            min-height: 100vh;
+            padding: 0;
+            touch-action: manipulation;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 25px 20px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(139,69,19,0.6));
+            border-radius: 20px;
+            border: 3px solid #D4AF37;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            color: #D4AF37;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            margin-bottom: 8px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+        
+        .header p {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            color: #E8E8E8;
+            font-style: italic;
+        }
+        
+        .menu {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .menu-btn {
+            background: linear-gradient(145deg, #8B4513, #A0522D, #CD853F);
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(139,69,19,0.4);
+            transition: all 0.3s ease;
+            border: 2px solid #D4AF37;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-height: 60px;
+        }
+        
+        .menu-btn:hover, .menu-btn:active {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212,175,55,0.5);
+            background: linear-gradient(145deg, #CD853F, #D4AF37);
+            color: #000;
+        }
+        
+        .section {
+            display: none;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(139,69,19,0.3));
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 3px solid #D4AF37;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            backdrop-filter: blur(15px);
+        }
+        
+        .section.active {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .back-btn {
+            background: linear-gradient(135deg, #666, #888);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 2px solid #999;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: linear-gradient(135deg, #888, #AAA);
+            transform: translateY(-2px);
+        }
+        
+        /* Shooting Game Styles */
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(to bottom, 
+                #87CEEB 0%, 
+                #4682B4 30%, 
+                #228B22 30%, 
+                #006400 70%,
+                #654321 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 3px solid #D4AF37;
+            cursor: crosshair;
+        }
+        
+        .tree {
+            position: absolute;
+            bottom: 0;
+        }
+        
+        .tree1 {
+            left: 10%;
+            width: 40px;
+            height: 120px;
+            background: #4a5d23;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            z-index: 3;
+        }
+        
+        .tree2 {
+            right: 15%;
+            width: 50px;
+            height: 140px;
+            background: #3d4f1f;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            z-index: 3;
+        }
+        
+        .tree3 {
+            left: 70%;
+            width: 35px;
+            height: 100px;
+            background: #556b2a;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            z-index: 3;
+        }
+        
+        .rock {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 60px;
+            height: 30px;
+            background: #696969;
+            border-radius: 50%;
+            z-index: 2;
+        }
+        
+        .crosshair {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #FF0000;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10;
+            transform: translate(-50%, -50%);
+        }
+        
+        .crosshair::before,
+        .crosshair::after {
+            content: '';
+            position: absolute;
+            background: #FF0000;
+        }
+        
+        .crosshair::before {
+            width: 20px;
+            height: 2px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .crosshair::after {
+            width: 2px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .target {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: radial-gradient(circle, red 20%, white 20%, white 40%, red 40%, red 60%, white 60%, white 80%, red 80%);
+            border-radius: 50%;
+            cursor: crosshair;
+            transition: all 0.2s ease;
+            border: 2px solid #000;
+            z-index: 4;
+        }
+        
+        .target:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Player Input */
+        .player-input {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .name-input {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #D4AF37;
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .name-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .start-btn {
+            background: linear-gradient(135deg, #228B22, #32CD32);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid #32CD32;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 5px;
+        }
+        
+        .start-btn:hover {
+            background: linear-gradient(135deg, #32CD32, #7FFF00);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(50,205,50,0.4);
+        }
+        
+        /* Game Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .accuracy-container {
+            grid-column: 1 / -1;
+            margin-top: 10px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(139,69,19,0.3));
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #D4AF37;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 900;
+            color: #D4AF37;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #E8E8E8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+        
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 2px solid #D4AF37;
+        }
+        
+        .timer-display {
+            background: linear-gradient(135deg, rgba(255,69,0,0.3), rgba(255,140,0,0.2));
+            border: 3px solid #FF4500;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #FF4500;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255,69,0,0.3);
+        }
+        
+        /* Jokes Styles */
+        .joke {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(212,175,55,0.1));
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 6px solid #D4AF37;
+            border: 2px solid rgba(212,175,55,0.3);
+        }
+        
+        .joke-setup {
+            font-size: 16px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            color: #E8E8E8;
+        }
+        
+        .joke-punchline {
+            font-size: 16px;
+            color: #D4AF37;
+            font-weight: bold;
+            font-style: italic;
+            display: none;
+            line-height: 1.5;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(212,175,55,0.1);
+            border-radius: 8px;
+        }
+        
+        .reveal-btn {
+            background: linear-gradient(135deg, #FF8C00, #FFA500);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .reveal-btn:hover {
+            background: linear-gradient(135deg, #FFA500, #FFD700);
+            transform: translateY(-2px);
+        }
+        
+        /* Quiz Styles */
+        .question {
+            background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(139,69,19,0.3));
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #D4AF37;
+        }
+        
+        .question h3 {
+            color: #D4AF37;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .answers {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .answer-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(212,175,55,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .answer-btn:hover {
+            border-color: #D4AF37;
+            background: rgba(212,175,55,0.2);
+        }
+        
+        .answer-btn.correct {
+            background: rgba(34,139,34,0.3);
+            border-color: #32CD32;
+        }
+        
+        .answer-btn.incorrect {
+            background: rgba(220,20,60,0.3);
+            border-color: #DC143C;
+        }
+        
+        /* Leaderboard */
+        .leaderboard {
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(139,69,19,0.4));
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 3px solid #D4AF37;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+        
+        .leaderboard h3 {
+            color: #D4AF37;
+            margin-bottom: 15px;
+            font-size: 20px;
+            text-align: center;
+        }
+        
+        .player-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            border-left: 4px solid #D4AF37;
+            transition: all 0.3s ease;
+        }
+        
+        .player-entry:hover {
+            background: rgba(212,175,55,0.2);
+            transform: translateX(3px);
+        }
+        
+        .player-name {
+            font-weight: bold;
+            color: #E8E8E8;
+        }
+        
+        .player-score {
+            color: #D4AF37;
+            font-weight: bold;
+        }
+        
+        /* Message Display */
+        .message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(0,0,0,0.95), rgba(139,69,19,0.8));
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-weight: bold;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.5s ease;
+            border: 2px solid #D4AF37;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+            max-width: 90%;
+            text-align: center;
+        }
+        
+        .message.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(10px);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Responsive Design */
+        @media (min-width: 480px) {
+            .stats-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .game-area {
+                height: 400px;
+            }
+        }
+        
+        /* Disable right-click and text selection */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+    <div class="container">
+        <div class="header">
+            <h1>🦌 EPIC BOSVELD CHALLENGE 🎯</h1>
+            <p>Ultimate Weekend Warriors Competition</p>
+        </div>
+        
+        <div id="menu" class="menu">
+            <button class="menu-btn" onclick="showSection('shooting')">🎯 Target Shooting Range</button>
+            <button class="menu-btn" onclick="showSection('quiz')">🧠 Quick Safety Quiz</button>
+            <button class="menu-btn" onclick="showSection('jokes')">😂 Legendary Hunting Jokes</button>
+            <button class="menu-btn" onclick="showSection('leaderboard')">🏆 Champions Board</button>
+        </div>
+        
+        <!-- Shooting Game Section -->
+        <div id="shooting" class="section">
+            <button class="back-btn" onclick="showMenu()">← Back to Menu</button>
+            <h2 style="color: #D4AF37; margin-bottom: 20px; text-align: center;">🎯 Elite Shooting Range</h2>
+            
+            <div class="player-input">
+                <input type="text" id="playerName" class="name-input" placeholder="Enter your marksman name" maxlength="25">
+                <br>
+                <button class="start-btn" onclick="startGame()">🎯 Start Shooting!</button>
+                <button class="start-btn" onclick="resetGame()">🔄 Reset Range</button>
+            </div>
+            
+            <div class="timer-display hidden" id="timerDisplay">
+                Time Remaining: <span id="timeLeft">30</span>s
+            </div>
+            
+            <div class="score-board hidden" id="scoreBoard">
+                <div>Score: <span id="score">0</span></div>
+                <div>Hits: <span id="hits">0</span></div>
+                <div>Ammo: <span id="ammo">15</span></div>
+            </div>
+            
+            <div class="stats-container hidden" id="statsContainer">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalScore">0</div>
+                    <div class="stat-label">Total Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="successfulHits">0</div>
+                    <div class="stat-label">Bulls Eyes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalMisses">0</div>
+                    <div class="stat-label">Near Misses</div>
+                </div>
+                <div class="accuracy-container">
+                    <div class="stat-card">
+                        <div class="stat-value" id="accuracy">0%</div>
+                        <div class="stat-label">Marksman Accuracy</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-area hidden" id="gameArea">
+                <div class="crosshair" id="crosshair"></div>
+                <div class="tree tree1"></div>
+                <div class="tree tree2"></div>
+                <div class="tree tree3"></div>
+                <div class="rock"></div>
+            </div>
+            
+            <div id="gameStatus" style="text-align: center; font-size: 16px; margin-top: 15px; font-weight: bold;"></div>
+        </div>
+        
+        <!-- Quiz Section -->
+        <div id="quiz" class="section">
+            <button class="back-btn" onclick="showMenu()">← Back to Menu</button>
+            <h2 style="color: #D4AF37; margin-bottom: 20px; text-align: center;">🧠 Marksman Knowledge Test</h2>
+            <div id="quizContainer"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <div id="quizScore" style="font-size: 18px; font-weight: bold; color: #D4AF37;"></div>
+                <button class="start-btn" onclick="resetQuiz()" style="margin-top: 15px;">Restart Test</button>
+            </div>
+        </div>
+        
+        <!-- Jokes Section -->
+        <div id="jokes" class="section">
+            <button class="back-btn" onclick="showMenu()">← Back to Menu</button>
+            <h2 style="color: #D4AF37; margin-bottom: 20px; text-align: center;">😂 Legendary Hunting Jokes</h2>
+            <div id="jokesContainer"></div>
+        </div>
+        
+        <!-- Leaderboard Section -->
+        <div id="leaderboard" class="section">
+            <button class="back-btn" onclick="showMenu()">← Back to Menu</button>
+            <h2 style="color: #D4AF37; margin-bottom: 20px; text-align: center;">🏆 Elite Marksmen Champions</h2>
+            <div id="leaderboardContainer">
+                <p style="text-align: center; color: #E8E8E8; font-style: italic;">No champions yet. Show your skills on the range!</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="message" id="message"></div>
+    
+    <script>
+        // Disable developer tools
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+                (e.ctrlKey && e.shiftKey && e.key === 'C') || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Game State
+        let gameState = {
+            playerName: '',
+            gameActive: false,
+            totalShots: 0,
+            successfulHits: 0,
+            totalMisses: 0,
+            totalScore: 0,
+            timeLeft: 30,
+            ammo: 15,
+            gameTimer: null,
+            targetTimer: null
+        };
+        
+        // Quiz State
+        let quizState = {
+            currentQuestionIndex: 0,
+            quizScore: 0,
+            questionsAnswered: 0
+        };
+        
+        // Epic Hunting Jokes
+        const epicJokes = [
+            {
+                setup: "Three hunters were bragging about their shooting skills. The first one said, 'I'm so good, I can hit a fly at 100 meters!'",
+                punchline: "The second hunter laughed and said, 'That's nothing! I once shot a mosquito's wings off at 200 meters and it had to take the bus home!'"
+            },
+            {
+                setup: "Why don't hunters ever get lost in the woods?",
+                punchline: "Because they always follow their gut... and it usually leads them straight to the nearest braai!"
+            },
+            {
+                setup: "A hunter walks into a pharmacy and asks, 'Do you have anything for shooting pains?'",
+                punchline: "The pharmacist replies, 'Try not to shoot yourself in the foot next time!'"
+            },
+            {
+                setup: "What's the difference between a hunter and a fisherman?",
+                punchline: "A fisherman lies about the one that got away. A hunter lies about the one that didn't get away!"
+            },
+            {
+                setup: "Why did the hunter bring a ladder to the hunting trip?",
+                punchline: "Because he heard the best shots were at a higher caliber!"
+            },
+            {
+                setup: "A city guy goes hunting for the first time. He shoots and misses 20 times. His guide says, 'You're shooting too high!'",
+                punchline: "The city guy replies, 'Well, at least I'm aiming high in life!'"
+            },
+            {
+                setup: "What do you call a deer with no eyes?",
+                punchline: "No-eye-deer! But what do you call a deer with no eyes and no legs? Still no-eye-deer!"
+            },
+            {
+                setup: "A hunter goes to the doctor complaining of hearing problems. The doctor asks, 'Can you describe the symptoms?'",
+                punchline: "The hunter replies, 'Well, Homer is fat and bald, and Marge has blue hair...'"
+            },
+            {
+                setup: "Why don't animals ever win at poker in the bush?",
+                punchline: "Because there are always cheetahs around!"
+            },
+            {
+                setup: "Two hunters are walking through the forest when one suddenly collapses. His friend calls emergency services: 'My friend is dead! What should I do?'",
+                punchline: "'First, make sure he's really dead,' says the operator. There's a gunshot, then the hunter comes back on the phone: 'Okay, now what?'"
+            }
+        ];
+        
+        // Quiz Questions (Boss Approved but Fun)
+        const quizQuestions = [
+            {
+                question: "What's the golden rule every marksman lives by?",
+                answers: [
+                    "Always wear your lucky socks",
+                    "Treat every firearm as if it's loaded",
+                    "Shoot first, ask questions later", 
+                    "The biggest gun always wins"
+                ],
+                correct: 1
+            },
+            {
+                question: "When are you most likely to spot game in the bushveld?",
+                answers: [
+                    "When you're taking a coffee break",
+                    "Dawn and dusk",
+                    "Only during full moon",
+                    "Right after lunch when you're sleepy"
+                ],
+                correct: 1
+            },
+            {
+                question: "What separates the pros from the amateurs?",
+                answers: [
+                    "Expensive gear and fancy camouflage",
+                    "Taking any shot that presents itself",
+                    "Only taking clean, ethical shots",
+                    "Having the loudest hunting stories"
+                ],
+                correct: 2
+            },
+            {
+                question: "You make a less-than-perfect shot on an animal. What's the right move?",
+                answers: [
+                    "Immediately chase it down making noise",
+                    "Shrug it off and find an easier target",
+                    "Wait 30 minutes then track carefully",
+                    "Fire randomly in the general direction"
+                ],
+                correct: 2
+            },
+            {
+                question: "Best way to cross a fence with your firearm?",
+                answers: [
+                    "Throw it over first - gravity is your friend",
+                    "Climb over carefully with it loaded",
+                    "Unload it, place under fence, then cross",
+                    "Pole vault over while carrying it"
+                ],
+                correct: 2
+            }
+        ];
+        
+        // Navigation Functions
+        function showSection(sectionId) {
+            document.getElementById('menu').style.display = 'none';
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            
+            if (sectionId === 'quiz') {
+                initQuiz();
+            } else if (sectionId === 'jokes') {
+                initJokes();
+            } else if (sectionId === 'leaderboard') {
+                updateLeaderboardDisplay();
+            }
+        }
+        
+        function showMenu() {
+            document.getElementById('menu').style.display = 'grid';
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            resetGame();
+        }
+        
+        // Message Display
+        function showMessage(text) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.classList.add('show');
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Game Functions
+        function startGame() {
+            const nameInput = document.getElementById('playerName');
+            if (!nameInput.value.trim()) {
+                showMessage('Enter your marksman name first!');
+                return;
+            }
+            
+            gameState.playerName = nameInput.value.trim();
+            gameState.gameActive = true;
+            gameState.totalShots = 0;
+            gameState.successfulHits = 0;
+            gameState.totalMisses = 0;
+            gameState.totalScore = 0;
+            gameState.timeLeft = 30;
+            gameState.ammo = 15;
+            
+            // Show game elements
+            document.getElementById('timerDisplay').classList.remove('hidden');
+            document.getElementById('scoreBoard').classList.remove('hidden');
+            document.getElementById('statsContainer').classList.remove('hidden');
+            document.getElementById('gameArea').classList.remove('hidden');
+            
+            startTimer();
+            spawnTarget();
+            updateDisplay();
+            showMessage(`Lock and load ${gameState.playerName}! Show us your skills!`);
+        }
+        
+        function startTimer() {
+            gameState.gameTimer = setInterval(() => {
+                gameState.timeLeft--;
+                document.getElementById('timeLeft').textContent = gameState.timeLeft;
+                
+                if (gameState.timeLeft <= 10) {
+                    document.getElementById('timerDisplay').style.color = '#DC143C';
+                    document.getElementById('timerDisplay').style.animation = 'pulse 1s infinite';
+                }
+                
+                if (gameState.timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+        
+        function endGame() {
+            clearInterval(gameState.gameTimer);
+            clearTimeout(gameState.targetTimer);
+            gameState.gameActive = false;
+            
+            // Remove all targets
+            document.querySelectorAll('.target').forEach(target => target.remove());
+            
+            // Save score
+            saveScore(gameState.playerName, gameState.totalScore, gameState.successfulHits, gameState.totalShots);
+            
+            showMessage(`Outstanding work ${gameState.playerName}! Final Score: ${gameState.totalScore} points!`);
+            updateLeaderboardDisplay();
+        }
+        
+        function resetGame() {
+            clearInterval(gameState.gameTimer);
+            clearTimeout(gameState.targetTimer);
+            gameState = {
+                playerName: '',
+                gameActive: false,
+                totalShots: 0,
+                successfulHits: 0,
+                totalMisses: 0,
+                totalScore: 0,
+                timeLeft: 30,
+                ammo: 15,
+                gameTimer: null,
+                targetTimer: null
+            };
+            
+            // Hide game elements
+            document.getElementById('timerDisplay').classList.add('hidden');
+            document.getElementById('scoreBoard').classList.add('hidden');
+            document.getElementById('statsContainer').classList.add('hidden');
+            document.getElementById('gameArea').classList.add('hidden');
+            
+            // Reset displays
+            document.getElementById('timerDisplay').style.color = '#FF4500';
+            document.getElementById('timerDisplay').style.animation = 'none';
+            document.getElementById('timeLeft').textContent = '30';
+            document.getElementById('playerName').value = '';
+            document.getElementById('gameStatus').textContent = '';
+            
+            // Remove all targets
+            document.querySelectorAll('.target').forEach(target => target.remove());
+            
+            updateDisplay();
+        }
+        
+        function spawnTarget() {
+            if (!gameState.gameActive) return;
+            
+            const gameArea = document.getElementById('gameArea');
+            const target = document.createElement('div');
+            target.className = 'target';
+            
+            // Random position avoiding trees and obstacles
+            let x, y;
+            let validPosition = false;
+            let attempts = 0;
+            
+            while (!validPosition && attempts < 10) {
+                x = Math.random() * (gameArea.offsetWidth - 35);
+                y = Math.random() * (gameArea.offsetHeight - 35);
+                
+                // Avoid tree areas and bottom rocks
+                const avoidLeft = x > gameArea.offsetWidth * 0.05 && x < gameArea.offsetWidth * 0.15;
+                const avoidRight = x > gameArea.offsetWidth * 0.8 && x < gameArea.offsetWidth * 0.95;
+                const avoidCenter = x > gameArea.offsetWidth * 0.65 && x < gameArea.offsetWidth * 0.75;
+                const avoidBottom = y > gameArea.offsetHeight * 0.7;
+                const avoidRock = x > gameArea.offsetWidth * 0.45 && x < gameArea.offsetWidth * 0.55 && y > gameArea.offsetHeight * 0.8;
+                
+                if (!avoidLeft && !avoidRight && !avoidCenter && !avoidBottom && !avoidRock) {
+                    validPosition = true;
+                }
+                attempts++;
+            }
+            
+            target.style.left = x + 'px';
+            target.style.top = y + 'px';
+            
+            target.onclick = function() {
+                if (gameState.ammo > 0 && gameState.gameActive) {
+                    shootTarget(target);
+                }
+            };
+            
+            gameArea.appendChild(target);
+            
+            // Remove target after 2-4 seconds if not hit
+            setTimeout(() => {
+                if (target.parentNode) {
+                    target.remove();
+                }
+            }, 2000 + Math.random() * 2000);
+            
+            // Spawn next target (more challenging timing)
+            gameState.targetTimer = setTimeout(() => {
+                spawnTarget();
+            }, 800 + Math.random() * 1500);
+        }
+        
+        function shootTarget(target) {
+            // Calculate hit accuracy based on distance from center
+            const rect = target.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Simulate shot accuracy
+            const hitChance = 0.75; // 75% hit rate for challenging gameplay
+            const isHit = Math.random() < hitChance;
+            
+            gameState.totalShots++;
+            gameState.ammo--;
+            
+            if (isHit) {
+                // Calculate points based on target position (harder targets = more points)
+                const basePoints = 10;
+                const difficultyBonus = Math.floor(Math.random() * 20) + 5; // 5-25 bonus
+                const timeBonus = Math.floor(gameState.timeLeft / 5) * 2; // Time bonus
+                const totalPoints = basePoints + difficultyBonus + timeBonus;
+                
+                gameState.successfulHits++;
+                gameState.totalScore += totalPoints;
+                
+                target.style.background = 'radial-gradient(circle, #32CD32 30%, #228B22 70%)';
+                showMessage(`🎯 BULLSEYE! +${totalPoints} points!`);
+                
+                setTimeout(() => {
+                    target.remove();
+                }, 500);
+            } else {
+                gameState.totalMisses++;
+                
+                target.style.background = 'radial-gradient(circle, #DC143C 30%, #8B0000 70%)';
+                showMessage(`💥 Close one! Keep your focus!`);
+                
+                setTimeout(() => {
+                    target.remove();
+                }, 800);
+            }
+            
+            updateDisplay();
+            
+            if (gameState.ammo <= 0) {
+                setTimeout(() => {
+                    endGame();
+                }, 1000);
+            }
+        }
+        
+        function updateDisplay() {
+            document.getElementById('score').textContent = gameState.totalScore;
+            document.getElementById('hits').textContent = gameState.successfulHits;
+            document.getElementById('ammo').textContent = gameState.ammo;
+            document.getElementById('totalScore').textContent = gameState.totalScore;
+            document.getElementById('successfulHits').textContent = gameState.successfulHits;
+            document.getElementById('totalMisses').textContent = gameState.totalMisses;
+            
+            const accuracy = gameState.totalShots > 0 ? 
+                Math.round((gameState.successfulHits / gameState.totalShots) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+        
+        // Mouse tracking for crosshair
+        document.addEventListener('mousemove', function(e) {
+            const gameArea = document.getElementById('gameArea');
+            if (!gameArea.classList.contains('hidden')) {
+                const crosshair = document.getElementById('crosshair');
+                const rect = gameArea.getBoundingClientRect();
+                if (e.clientX >= rect.left && e.clientX <= rect.right && 
+                    e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                    crosshair.style.left = (e.clientX - rect.left) + 'px';
+                    crosshair.style.top = (e.clientY - rect.top) + 'px';
+                    crosshair.style.display = 'block';
+                } else {
+                    crosshair.style.display = 'none';
+                }
+            }
+        });
+        
+        // Touch support for mobile
+        document.addEventListener('touchmove', function(e) {
+            const gameArea = document.getElementById('gameArea');
+            if (!gameArea.classList.contains('hidden')) {
+                const crosshair = document.getElementById('crosshair');
+                const rect = gameArea.getBoundingClientRect();
+                const touch = e.touches[0];
+                if (touch.clientX >= rect.left && touch.clientX <= rect.right && 
+                    touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                    crosshair.style.left = (touch.clientX - rect.left) + 'px';
+                    crosshair.style.top = (touch.clientY - rect.top) + 'px';
+                    crosshair.style.display = 'block';
+                }
+            }
+        });
+        
+        // Leaderboard Functions
+        function saveScore(name, score, hits, shots) {
+            const scores = JSON.parse(localStorage.getItem('epicBosveldScores') || '[]');
+            const accuracy = shots > 0 ? Math.round((hits / shots) * 100) : 0;
+            
+            scores.push({
+                name: name,
+                score: score,
+                hits: hits,
+                shots: shots,
+                accuracy: accuracy,
+                date: new Date().toLocaleDateString()
+            });
+            
+            scores.sort((a, b) => b.score - a.score);
+            scores.splice(15);
+            localStorage.setItem('epicBosveldScores', JSON.stringify(scores));
+        }
+        
+        function updateLeaderboardDisplay() {
+            const scores = JSON.parse(localStorage.getItem('epicBosveldScores') || '[]');
+            const container = document.getElementById('leaderboardContainer');
+            
+            if (scores.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #E8E8E8; font-style: italic;">No champions yet. Show your skills on the range!</p>';
+                return;
+            }
+            
+            let html = '<div class="leaderboard">';
+            
+            scores.forEach((entry, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                html += `
+                    <div class="player-entry">
+                        <div>
+                            <span style="color: #D4AF37; font-size: 18px; margin-right: 10px;">${medal}</span>
+                            <span class="player-name">${entry.name}</span>
+                            <div style="font-size: 12px; color: #BBB; margin-top: 2px;">
+                                ${entry.hits}/${entry.shots} shots (${entry.accuracy}%) • ${entry.date}
+                            </div>
+                        </div>
+                        <span class="player-score">${entry.score}</span>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        // Quiz Functions
+        function initQuiz() {
+            quizState.currentQuestionIndex = 0;
+            quizState.quizScore = 0;
+            quizState.questionsAnswered = 0;
+            displayQuestion();
+        }
+        
+        function displayQuestion() {
+            const container = document.getElementById('quizContainer');
+            
+            if (quizState.currentQuestionIndex >= quizQuestions.length) {
+                container.innerHTML = `
+                    <div class="question">
+                        <h3 style="color: #D4AF37; text-align: center; font-size: 20px;">Quiz Complete!</h3>
+                        <p style="text-align: center; color: #E8E8E8; margin-top: 15px;">
+                            You got ${quizState.quizScore}/${quizQuestions.length} correct. Well done!
+                        </p>
+                    </div>
+                `;
+                document.getElementById('quizScore').textContent = `Final Score: ${quizState.quizScore}/${quizQuestions.length}`;
+                return;
+            }
+            
+            const question = quizQuestions[quizState.currentQuestionIndex];
+            container.innerHTML = `
+                <div class="question">
+                    <h3>Question ${quizState.currentQuestionIndex + 1}: ${question.question}</h3>
+                    <div class="answers">
+                        ${question.answers.map((answer, index) => 
+                            `<button class="answer-btn" onclick="selectAnswer(${index})">${answer}</button>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('quizScore').textContent = `Score: ${quizState.quizScore}/${quizState.questionsAnswered}`;
+        }
+        
+        function selectAnswer(selectedIndex) {
+            const question = quizQuestions[quizState.currentQuestionIndex];
+            const buttons = document.querySelectorAll('.answer-btn');
+            
+            quizState.questionsAnswered++;
+            
+            buttons.forEach((button, index) => {
+                if (index === question.correct) {
+                    button.classList.add('correct');
+                } else if (index === selectedIndex && index !== question.correct) {
+                    button.classList.add('incorrect');
+                }
+                button.disabled = true;
+                button.style.cursor = 'default';
+            });
+            
+            if (selectedIndex === question.correct) {
+                quizState.quizScore++;
+                showMessage('Spot on! Nice knowledge.');
+            } else {
+                showMessage('Close, but check the highlighted answer.');
+            }
+            
+            setTimeout(() => {
+                quizState.currentQuestionIndex++;
+                displayQuestion();
+            }, 2500);
+        }
+        
+        function resetQuiz() {
+            initQuiz();
+        }
+        
+        // Jokes Functions
+        function initJokes() {
+            const container = document.getElementById('jokesContainer');
+            container.innerHTML = epicJokes.map((joke, index) => `
+                <div class="joke">
+                    <div class="joke-setup">${joke.setup}</div>
+                    <div class="joke-punchline" id="punchline-${index}">${joke.punchline}</div>
+                    <button class="reveal-btn" onclick="revealPunchline(${index})">💥 Show Punchline</button>
+                </div>
+            `).join('');
+        }
+        
+        function revealPunchline(index) {
+            const punchline = document.getElementById(`punchline-${index}`);
+            punchline.style.display = 'block';
+            event.target.style.display = 'none';
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            showMenu();
+            
+            // Add pulse animation style
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.05); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Auto-expire after 4 days
+            const deployDate = localStorage.getItem('epicBosveldAppDate');
+            if (!deployDate) {
+                localStorage.setItem('epicBosveldAppDate', Date.now());
+            } else {
+                const daysSinceDeployment = (Date.now() - parseInt(deployDate)) / (1000 * 60 * 60 * 24);
+                if (daysSinceDeployment > 4) {
+                    document.body.innerHTML = `
+                        <div style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; color: white;">
+                            <div>
+                                <h2>🦌 Epic Weekend Concluded 🎯</h2>
+                                <p>Hope you had an amazing time! This challenge was designed for your special event.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        });
+        
+        // Prevent code theft
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
